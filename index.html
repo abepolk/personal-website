@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abe Polk</title>
+    <!-- PostCSS Tailwind output -->
+    <link href="./output.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <!-- Header Section -->
+    <header class="bg-white shadow-sm">
+        <div class="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold text-gray-900">Abe Polk</h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-xl lg:max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <!-- TODO add heashot -->
+        <!-- About Section -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-6">About Me</h2>
+            <p class="text-gray-600 leading-relaxed">
+                I am a software engineer who takes a creative and analytical approach to technical
+                problems. Comfortable both digging through code and working with collaborators, I
+                thrive in many different types of environments. My passion for tackling complex
+                challenges inspires my professional work, as well as the hundreds of hours spent
+                independently contributing to open source software.
+            </p>
+        </section>
+
+        <!-- Experience Section -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-6">Experience</h2>
+            
+            <div class="space-y-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-medium text-gray-900">Temporary Event Assistant</h3>
+                    <p class="text-gray-500 mb-2">John Leonard • Mar - May 2024, Oct 2024 - Present</p>
+                    <ul class="list-disc list-inside">
+                        <li class="text-gray-600">Work up to 11.5-hour shifts at various conferences held at the Boston Convention and Exhibition Center</li>
+                        <li class="text-gray-600">Assist conference attendees in scanning QR codes from emails to get conference badges</li>
+                        <li class="text-gray-600">Answer attendee questions, including questions about room locations and event schedules</li>
+                        <li class="text-gray-600">Check attendee identification to ensure events are only attended by paying attendees</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-medium text-gray-900">Software Engineer</h3>
+                    <p class="text-gray-500 mb-2">PaymentWorks • Jan - Jun 2022</p>
+                    <ul class="list-disc list-inside">
+                        <li class="text-gray-600">Add both features and bug fixes to app with a BackboneJS front end and a Django back end</li>
+                        <li class="text-gray-600">Participate in all ceremonies in fully Agile team, including standups, retros, demos, sprint plannings, and refinement</li>
+                        <li class="text-gray-600">Conduct code reviews to identify bugs and opportunities for design improvements in colleagues’ work</li>
+                        <li class="text-gray-600">Document all work and priorities in JIRA</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-medium text-gray-900">Full Stack Developer</h3>
+                    <p class="text-gray-500 mb-2">Power of Patients • Nov 2020 - Jan 2022</p>
+                    <ul class="list-disc list-inside">
+                        <li class="text-gray-600">Add functionality to full-stack app for different types of users to log in with and connect with each other</li>
+                        <li class="text-gray-600">Collaborate with team members to decide optimal data model for SQL database</li>
+                        <li class="text-gray-600">Develop, refactor, and debug app with a React frontend, a Node and Express backend, and a PostgreSQL database</li>
+                        <li class="text-gray-600">Migrate AWS infrastructure, including EC2s, an S3, CloudFront, and RDS Postgres to Azure, changing HTTP to HTTPS everywhere manually and converting a EC2 with a cron job on AWS to Azure serverless (Azure Function)</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-medium text-gray-900">Software Engineering Intern</h3>
+                    <p class="text-gray-500 mb-2">Bitome • Jul - Oct 2020</p>
+                    <ul class="list-disc list-inside">
+                        <li class="text-gray-600">Built nine-page company website using HTML, CSS, and JavaScript</li>
+                        <li class="text-gray-600">Created a build script written in Bash and Python to compile Jinja HTML generator templates into HTML and Sass into CSS</li>
+                        <li class="text-gray-600">Manipulated inline SVG code in order to make SVG sub-elements respond to click events</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-medium text-gray-900">Open Source Contributor</h3>
+                    <p class="text-gray-500 mb-2">JabRef • Jul 2018 - Feb 2020</p>
+                    <ul class="list-disc list-inside">
+                        <li class="text-gray-600">Overhaul event-driven architecture such that events for a single user action are combined, allowing faster database synchronization, including adding unit tests with JUnit</li>
+                        <li class="text-gray-600">Improved deserialization of BibTeX bibliography files by removing redundant unquoting functionality</li>
+                        <li class="text-gray-600">Refactored Swing GUI to JavaFX using model-view-view-model architecture</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Form -->
+        <section>
+            <h2 class="text-2xl font-semibold text-gray-900 mb-6">Contact Me</h2>
+            <form id="contactForm" class="space-y-6" method="POST" data-netlify="true" netlify-honeypot="sfuio" data-netlify-recaptcha="true">
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                    <input type="text" name="name" id="name" required
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-lime-600 focus:border-lime-600">
+                </div>
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" name="email" id="email" required
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-lime-600 focus:border-lime-600">
+                </div>
+                <div>
+                    <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+                    <textarea name="message" id="message" rows="4" required
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-lime-600 focus:border-lime-600"></textarea>
+                </div>
+                <div class="hidden">
+                    <label for="sfuio">Don’t fill this form field out or else I won't get your message:</label>
+                         <input type="text" name="sfuio" id="sfuio">
+                    </label>
+                </div>
+                <div data-netlify-recaptcha="true"></div>
+                <div>
+                    <button type="submit"
+                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-lime-700 hover:bg-lime-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lime-600">
+                        Send Message
+                    </button>
+                </div>
+            </form>
+            <p id="contactFormSuccessMsg" class="hidden text-gray-700">Your message has been sent. Thank you!</p>
+            <p id="contactFormErrorMsg" class="hidden text-gray-700">There was a problem sending your message. Please try again later.</p>
+        </section>
+        <!-- TODO add GitHub and LinkedIn -->
+    </main>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const myForm = e.target;
+            const formData = new FormData(myForm);
+            fetch("/", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(formData).toString()
+            })
+                .then(() => {
+                    console.log("Contact form successfully submitted");
+                    document.getElementById('contactFormSuccessMsg').classList.remove('hidden');
+            })
+                .catch((error) => {
+                    console.error(error);
+                    document.getElementById('contactFormErrorMsg').classList.remove('hidden');
+            })
+                .finally(() => {
+                    document.getElementById('contactForm').classList.add('hidden');
+            });
+            // Only used if we are not making the form disappear, which we are
+            // this.reset();
+        });
+    </script>
+    -->
+</body>
+</html>
