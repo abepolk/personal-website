@@ -186,8 +186,41 @@
             // Only used if we are not making the form disappear, which we are
             // this.reset();
         });
-        console.log("Firing test event");
-        gtag("event", "test_event_06042025");
+        // Track an element with Google Analytics, assigning it a GA event name.
+        function trackVisibleWithGa(elementId, eventName) {
+            let timerId = null;
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        // Element has become visible, start the timer
+                        timerId = setTimeout(() => {
+                            console.log(`GA event ${eventName} fired`);
+                            gtag('event', eventName);
+                            timerId = null;
+                        }, 500);
+                    } else {
+                        // Element has become not visible
+                        if (timerId) {
+                            // Clear the timer
+                            clearTimeout(timerId);
+                            timerId = null;
+                        }
+                    }
+                });
+            });
+            const element = document.getElementById(elementId);
+            observer.observe(element);
+            return () => observer.disconnect();
+        }
+        trackVisibleWithGa('aboutMe', 'about_me_visible_gtag');
+        trackVisibleWithGa('bitome', 'bitome_visible_gtag');
+        trackVisibleWithGa('contactForm', 'contact_form_visible_gtag');
+        // TODO get dev link position click tracking off of GTM
+        trackVisibleWithGa('jabref', 'jabref_visible_gtag');
+        trackVisibleWithGa('johnLeonard', 'john_leonard_visible_gtag');
+        trackVisibleWithGa('openSource', 'open_source_visible_gtag');
+        trackVisibleWithGa('paymentworks', 'paymentworks_visible_gtag');
+        trackVisibleWithGa('powerOfPatients', 'power_of_patients_visible_gtag');
     </script>
 </body>
 </html>
