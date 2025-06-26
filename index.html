@@ -207,7 +207,7 @@
                         }
                     }
                 });
-            });
+            }, {threshold: 0.8});
             const element = document.getElementById(elementId);
             observer.observe(element);
             return () => observer.disconnect();
