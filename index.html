@@ -47,7 +47,7 @@
         <section id="aboutMe" class="mb-16">
             <h2 class="text-2xl font-semibold text-gray-900 mb-6">About Me</h2>
             <p class="text-gray-600 leading-relaxed">
-                Since <a class="text-blue-600 underline" href="#paymentworks">my last few software engineering positions</a>, I have taken a hiatus to take care of
+                Since <a id="devLinks" class="text-blue-600 underline" href="#paymentworks">my last few software engineering positions</a>, I have taken a hiatus to take care of
                 personal matters. During my hiatus, I have kept up my tech skills doing a few
                 projects. They include this website (<a class="text-blue-600 underline" href="https://github.com/abepolk/personal-website">open source code</a>) and <a class="text-blue-600 underline" href="https://github.com/abepolk/terraform-gcs-backend">a project involving Terraform</a>, but the
                 largest project is writing <a class="text-blue-600 underline" href="https://github.com/lxml/lxml/pulls?q=is%3Apr+author%3Aabepolk">documentation</a> and <a class="text-blue-600 underline" href="https://stackoverflow.com/a/79470846/8387246">an analysis</a> of the internals of <a class="text-blue-600 underline" href="https://lxml.de/">lxml</a>, a
@@ -217,6 +217,9 @@
         trackVisibleWithGa('aboutMe', 'about_me_visible_gtag');
         trackVisibleWithGa('bitome', 'bitome_visible_gtag');
         trackVisibleWithGa('contactForm', 'contact_form_visible_gtag');
+        document.getElementById('devLinks').addEventListener('click', () => {
+            gtag('event', 'dev_position_click')
+        });
         // TODO get dev link position click tracking off of GTM
         trackVisibleWithGa('jabref', 'jabref_visible_gtag');
         trackVisibleWithGa('johnLeonard', 'john_leonard_visible_gtag');
