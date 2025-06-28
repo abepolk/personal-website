@@ -10,6 +10,7 @@
         gtag('config', 'G-E39G1PT4JD', new URLSearchParams(window.location.search).has('debug') ? {debug_mode: true} : undefined);
     </script>
     <!-- Google Tag Manager -->
+    <-- No longer using GTM, using plain gtag.js instead -->
     <!--    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -220,7 +221,6 @@
         document.getElementById('devLinks').addEventListener('click', () => {
             gtag('event', 'dev_position_click')
         });
-        // TODO get dev link position click tracking off of GTM
         trackVisibleWithGa('jabref', 'jabref_visible_gtag');
         trackVisibleWithGa('johnLeonard', 'john_leonard_visible_gtag');
         trackVisibleWithGa('openSource', 'open_source_visible_gtag');
