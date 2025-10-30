@@ -7,7 +7,9 @@
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', 'G-E39G1PT4JD', new URLSearchParams(window.location.search).has('debug') ? {debug_mode: true} : undefined);
+        new URLSearchParams(window.location.search).has('debug')
+            ? gtag('config', 'G-E39G1PT4JD', { debug_mode: true })
+            : gtag('config', 'G-E39G1PT4JD');
     </script>
     <!-- Google Tag Manager -->
     <!-- No longer using GTM, using plain gtag.js instead -->
