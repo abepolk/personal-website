@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-E39G1PT4JD"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        new URLSearchParams(window.location.search).has('debug')
+            ? gtag('config', 'G-E39G1PT4JD', { debug_mode: true })
+            : gtag('config', 'G-E39G1PT4JD');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide to the lxml source code that parses HTML</title>
+    <!-- PostCSS Tailwind output -->
+    <link href="./output.css" rel="stylesheet">
+    <link href="./favicon.ico" rel="icon" type="image/x-icon">
+</head>
+<body class="bg-gray-50">
+    <!-- Header Section -->
+    <header class="bg-white shadow-xs">
+        <div class="max-w-xl lg:max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold text-gray-900">Guide to the lxml source code that parses HTML</h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-xl lg:max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+
+        <!-- About Section -->
+        <section id="generalNotes" class="mb-16">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-6">General notes</h2>
+            <p class="text-gray-600 leading-relaxed">
+                When I refer to pointers that are relevant in both lxml and libxml2, I use both the Cython format used in lxml and the C format used in libxml2, e.g. ctxt.node / ctxt->node.
+            </p>
+        </section>
+        
+        <section id="cythonNotes" class="mb-16">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-6">Notes on Cython in the context of lxml</h2>
+            <p>
+                The language of lxml is Cython, a language used to wrap C libraries with Python, among other things. Cython is used by lxml to wrap the C library libxml2. The version of Cython used in lxml has syntax similar to Python, but with a few important differences. For example, the extra keywords `cdef` and `cimport` are among the more obvious. Others are more subtle, such as using `c_pointer[n]` notation to denote the nth multiple of the size of the data type of the pointer after the pointed-to value in memory (different from a Python list). For details, visit the Cython documentation.
+            </p>
+        </section>
+
+        <section id="lxmlResponsibilities" class="mb-16">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-6">Division of responsibilities between lxml (in parser.pxi) and libxml2 when parsing HTML</h2>
+            <p>
+                In parser.pxi, when parsing HTML, lxml largely passes the keyword arguments passed into `HTMLParser` into libxml2's parsing functions when a parse is started from Python. It also creates data structures that libxml2 would have created anyway, and passes them into libxml2. Sometimes, it creates data structures that are automatically discarded by libxml2 and replaced by an identical one. For example, in lxml's function _newParserCtxt, there is a call to libxml2s htmlCreateMemoryParserCtxt. This creates a pointer to a libxml2-level HTML input as well as creating a libxml2-level ctxt, but the input is dropped and replaced when libxml2 is actually asked to do the main parsing. Some arguments to lxml's HTMLParser are not passed into a libxml2 function, but rather change a callback in libxml2. In particular, lxml changes some libxml2 SAX callbacks, which are discussed in the following section.
+            </p>
+        </section>
+
+        <section id="libxml2Responsibilities" class="mb-16">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-6">Division of responsibilities between libxml2 files when parsing HTML</h2>
+            <p>
+               HTMLParser.c is responsible for determining what part of the document is currently being parsed, breaking it up into meaningful strings, and keeping track of parser state in a struct referenced by a `htmlParserCtxtPtr`. Those strings are passed onto functions in SAX2.c and tree.c, which actually build the DOM. This division is useful because the functions in SAX2.c are actually pointed to by pointers from ctxt->sax, and called using those pointers. Using these function pointers allows libraries that wrap libxml2 to set their own custom callbacks to replace the defaults that libxml2 uses to build the DOM. Lxml uses this functionality, for example, to apply the remove_comments argument to HTMLParser. In _configureSaxContext in parser.pxi, it simply sets pctxt.sax.comment (where pctxt refers to the parsing htmlParserCtxt) to NULL. The logic in libxml2's HTMLParser then does not call ctxt->sax->comment, and the logic that adds comment notes to the DOM in SAX2.c and tree.c is not run when a comment is parsed by HTMLParser.c.
+            </p>
+        </section>
+
+        <section id="gotchas" class="mb-16">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-6">Gotchas</h2>
+            <p>
+                `ctxt->recovery` is not used when parsing HTML. libxml2 actually always recovers from errors in that the DOM is always built to the best libxml2 can, while keeping track of whether at least one error was found while parsing in the `ctxt->wellFormed` int, which acts as a boolean. Generally speaking, it isn't until lxml processes the document struct returned by libxml2 that an HTMLParser with the `recover` keyword set to False checks if the `ctxt->wellFormed` of the document is 0 or 1`, and if it's 0, raises an exception.
+            </p>
+        </section>
+
+    
+
+        <!-- Experience Section -->
+        <!-- <section class="mb-16">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-6">Experience</h2>
+            <div class="space-y-8">
+                <div id="johnLeonard" class="bg-white p-6 rounded-lg shadow-xs">
+                    <h3 class="text-xl font-medium text-gray-900">Event Assistant</h3>
+                    <p class="text-gray-500 mb-2">John Leonard • Mar 2024–Present</p>
+                    <ul class="list-disc ps-4">
+                        <li class="text-gray-600">Work up to 11.5-hour shifts at various conferences held at the Boston Convention and Exhibition Center</li>
+                        <li class="text-gray-600">Assist conference attendees in scanning QR codes from emails to get conference badges</li>
+                        <li class="text-gray-600">Answer attendee questions, including questions about room locations and event schedules</li>
+                        <li class="text-gray-600">Check attendee identification to ensure events are only attended by paying attendees</li>
+                    </ul>
+                </div>
+                <div id="openSource" class="bg-white p-6 rounded-lg shadow-xs">
+                    <h3 class="text-xl font-medium text-gray-900">Open Source Contributor</h3>
+                    <p class="text-gray-500 mb-2">Remote • Aug 2023–Present</p>
+                    <ul class="list-disc ps-4">
+                        <li class="text-gray-600">As an open source project, submitted <a class="text-blue-600 underline" href="https://github.com/lxml/lxml/pulls?q=is%3Apr+author%3Aabepolk">three pull requests</a> that all involve documentation to <a class="text-blue-600 underline" href="https://lxml.de/">lxml</a>, a Python/Cython/C library that parses HTML/XML</li>
+                        <li class="text-gray-600">Wrote <a class="text-blue-600 underline" href="https://medium.com/@abepolk/getting-more-information-on-lxml-errors-via-libxml2s-native-debugging-functions-27f8af439e0c">an article</a> on how to get more information on lxml errors by using debug functions in the library that it wraps, libxml2, to print information about parser state.</li>
+                        <li class="text-gray-600">Wrote <a class="text-blue-600 underline" href="https://stackoverflow.com/a/79470846/8387246">a StackOverflow answer</a> on how lxml and the C library it wraps exhibit unexpected behavior when they encounter HTML tags inside of certain types of elements, citing two locations in the C code.</li>
+                        <li class="text-gray-600">As <a class="text-blue-600 underline" href="https://github.com/abepolk/terraform-gcs-backend">another open source project</a>, created two Terraform templates that solve the problem of specifying that Terraform should use a backend contained in a Google Cloud Storage bucket, while also creating the bucket using Terraform.</li>
+                    </ul>
+                </div>
+                <div id="paymentworks" class="bg-white p-6 rounded-lg shadow-xs">
+                    <h3 class="text-xl font-medium text-gray-900">Software Engineer</h3>
+                    <p class="text-gray-500 mb-2">PaymentWorks • Jan–Jun 2022</p>
+                    <ul class="list-disc ps-4">
+                        <li class="text-gray-600">Added both features and bug fixes to an app with a BackboneJS frontend and a Django backend</li>
+                        <li class="text-gray-600">Participated in all ceremonies in a fully Agile team, including standups, retros, demos, sprint plannings, and refinement</li>
+                        <li class="text-gray-600">Conducted code reviews to identify bugs and opportunities for design improvements in colleagues’ work</li>
+                        <li class="text-gray-600">Documented all work and priorities in JIRA</li>
+                    </ul>
+                </div>
+                <div id="powerOfPatients" class="bg-white p-6 rounded-lg shadow-xs">
+                    <h3 class="text-xl font-medium text-gray-900">Full Stack Developer</h3>
+                    <p class="text-gray-500 mb-2">Power of Patients • Nov 2020–Jan 2022</p>
+                    <ul class="list-disc ps-4">
+                        <li class="text-gray-600">Added functionality to full-stack app for different types of users to log in with and connect with each other</li>
+                        <li class="text-gray-600">Collaborated with team members to decide optimal data model for SQL database</li>
+                        <li class="text-gray-600">Developed, refactored, and debugged app with a React frontend, a Node and Express backend, and a PostgreSQL database</li>
+                        <li class="text-gray-600">Migrated AWS infrastructure, including EC2s, an S3, CloudFront, and RDS Postgres to Azure, changing HTTP to HTTPS everywhere manually and converting a EC2 with a cron job on AWS to Azure serverless (Azure Function)</li>
+                    </ul>
+                </div>
+                <div id="bitome" class="bg-white p-6 rounded-lg shadow-xs">
+                    <h3 class="text-xl font-medium text-gray-900">Software Engineering Intern</h3>
+                    <p class="text-gray-500 mb-2">Bitome • Jul–Oct 2020</p>
+                    <ul class="list-disc ps-4">
+                        <li class="text-gray-600">Built a nine-page company website using HTML, CSS, and JavaScript</li>
+                        <li class="text-gray-600">Created a build script written in Bash and Python to compile Jinja HTML generator templates into HTML and Sass into CSS</li>
+                        <li class="text-gray-600">Manipulated inline SVG code in order to make SVG sub-elements respond to click events</li>
+                    </ul>
+                </div>
+                <div id="jabref" class="bg-white p-6 rounded-lg shadow-xs">
+                    <h3 class="text-xl font-medium text-gray-900">Java Open Source Contributor</h3>
+                    <p class="text-gray-500 mb-2">JabRef • Jul 2018–Feb 2020</p>
+                    <ul class="list-disc ps-4">
+                        <li class="text-gray-600">Overhauled event-driven architecture such that events for a single user action are combined, allowing faster database synchronization, including adding unit tests with JUnit</li>
+                        <li class="text-gray-600">Improved deserialization of BibTeX bibliography files by removing redundant unquoting functionality</li>
+                        <li class="text-gray-600">Refactored Swing GUI to JavaFX using model-view-view-model architecture</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    -->
+
+    </main>
+
+    <script>
+        // Track an element with Google Analytics, assigning it a GA event name.
+        function trackVisibleWithGa(elementId, eventName) {
+            let timerId = null;
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        // Element has become visible, start the timer
+                        timerId = setTimeout(() => {
+                            console.log(`GA event ${eventName} fired`);
+                            gtag('event', eventName);
+                            timerId = null;
+                        }, 500);
+                    } else {
+                        // Element has become not visible
+                        if (timerId) {
+                            // Clear the timer
+                            clearTimeout(timerId);
+                            timerId = null;
+                        }
+                    }
+                });
+            }, {threshold: 0.8});
+            const element = document.getElementById(elementId);
+            observer.observe(element);
+            return () => observer.disconnect();
+        }
+        trackVisibleWithGa('generalNotes', 'general_notes_visible');
+        trackVisibleWithGa('cythonNotes', 'cython_notes_visisble');
+        trackVisibleWithGa('lxmlResponsibilities', 'lxml_repsonsibilities_visible');
+        trackVisibleWithGa('libxml2Responsibilities', 'libxml2_responsibilities_visible');
+        trackVisibleWithGa('gotchas', 'gotchas_visible');
+    </script>
+</body>
+</html>
