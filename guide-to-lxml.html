@@ -30,38 +30,41 @@
     <main class="max-w-xl lg:max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
 
         <!-- About Section -->
-        <section id="generalNotes" class="mb-16">
+        <section id="generalNotes" class="mb-12">
             <h2 class="text-2xl font-semibold text-gray-900 mb-6">General notes</h2>
+            <p class="text-gray-600 leading-relaxed mb-4">
+                So far, in this guide, for lxml I am focused only on <code>parser.pxi</code>. All the files of lxml are <a class="text-blue-600 underline" href="https://lxml.de/lxml-source-howto.html#lxml-etree">briefly described</a> in the lxml documentation. <code>parser.pxi</code> is described specifically as: "Parsers for XML and HTML. This is the main parser engine. It's the reason why you can parse a document from various sources in two lines of Python code. It's definitely not the right place to start reading lxml's source code."
+            </p>
             <p class="text-gray-600 leading-relaxed">
-                When I refer to pointers that are relevant in both lxml and libxml2, I use both the Cython format used in lxml and the C format used in libxml2, e.g. ctxt.node / ctxt->node.
+                When I refer to pointers that are relevant in both lxml and libxml2, I use both the Cython format used in lxml and the C format used in libxml2, e.g. <code>ctxt.node</code> / <code>ctxt->node</code>.
             </p>
         </section>
 
-        <section id="cythonNotes" class="mb-16">
+        <section id="cythonNotes" class="mb-12">
             <h2 class="text-2xl font-semibold text-gray-900 mb-6">Notes on Cython in the context of lxml</h2>
-            <p>
-                The language of lxml is Cython, a language used to wrap C libraries with Python, among other things. Cython is used by lxml to wrap the C library libxml2. The version of Cython used in lxml has syntax similar to Python, but with a few important differences. For example, the extra keywords `cdef` and `cimport` are among the more obvious. Others are more subtle, such as using `c_pointer[n]` notation to denote the nth multiple of the size of the data type of the pointer after the pointed-to value in memory (different from a Python list). For details, visit the Cython documentation.
+            <p class="text-gray-600 leading-relaxed">
+                The language of lxml is Cython, a language used to wrap C libraries with Python, among other things. Cython is used by lxml to wrap the C library libxml2. The version of Cython used in lxml has syntax similar to Python, but with a few important differences. For example, the extra keywords <code>cdef</code> and <code>cimport</code> are among the more obvious. Others are more subtle, such as using <code>c_pointer[n]</code> notation to denote the n<sup>th</sup> multiple of the size of the data type of the pointer after the pointed-to value in memory (different from a Python list). For details, visit the Cython documentation.
             </p>
         </section>
 
-        <section id="lxmlResponsibilities" class="mb-16">
-            <h2 class="text-2xl font-semibold text-gray-900 mb-6">Division of responsibilities between lxml (in parser.pxi) and libxml2 when parsing HTML</h2>
-            <p>
-                In parser.pxi, when parsing HTML, lxml largely passes the keyword arguments passed into `HTMLParser` into libxml2's parsing functions when a parse is started from Python. It also creates data structures that libxml2 would have created anyway, and passes them into libxml2. Sometimes, it creates data structures that are automatically discarded by libxml2 and replaced by an identical one. For example, in lxml's function _newParserCtxt, there is a call to libxml2s htmlCreateMemoryParserCtxt. This creates a pointer to a libxml2-level HTML input as well as creating a libxml2-level ctxt, but the input is dropped and replaced when libxml2 is actually asked to do the main parsing. Some arguments to lxml's HTMLParser are not passed into a libxml2 function, but rather change a callback in libxml2. In particular, lxml changes some libxml2 SAX callbacks, which are discussed in the following section.
+        <section id="lxmlResponsibilities" class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-6">Division of responsibilities between lxml (in <code>parser.pxi</code>) and libxml2 when parsing HTML</h2>
+            <p class="text-gray-600 leading-relaxed">
+                In <code>parser.pxi</code>, when parsing HTML, lxml largely passes the keyword arguments passed into <code>HTMLParser</code> into libxml2's parsing functions when a parse is started from Python. It also creates data structures that libxml2 would have created anyway, and passes them into libxml2. Sometimes, it creates data structures that are automatically discarded by libxml2 and replaced by an identical one. For example, in lxml's function <code>_newParserCtxt</code>, there is a call to libxml2s <code>htmlCreateMemoryParserCtxt</code>. This creates a pointer to a libxml2-level HTML input as well as creating a libxml2-level context <code>ctxt</code>, but the input is dropped and replaced when libxml2 is actually asked to do the main parsing. Some arguments to lxml's <code>HTMLParser</code> are not passed into a libxml2 function, but rather change a callback in libxml2. In particular, lxml changes some libxml2 SAX callbacks, which are discussed in the following section.
             </p>
         </section>
 
-        <section id="libxml2Responsibilities" class="mb-16">
+        <section id="libxml2Responsibilities" class="mb-12">
             <h2 class="text-2xl font-semibold text-gray-900 mb-6">Division of responsibilities between libxml2 files when parsing HTML</h2>
-            <p>
-               HTMLParser.c is responsible for determining what part of the document is currently being parsed, breaking it up into meaningful strings, and keeping track of parser state in a struct referenced by a `htmlParserCtxtPtr`. Those strings are passed onto functions in SAX2.c and tree.c, which actually build the DOM. This division is useful because the functions in SAX2.c are actually pointed to by pointers from ctxt->sax, and called using those pointers. Using these function pointers allows libraries that wrap libxml2 to set their own custom callbacks to replace the defaults that libxml2 uses to build the DOM. Lxml uses this functionality, for example, to apply the remove_comments argument to HTMLParser. In _configureSaxContext in parser.pxi, it simply sets pctxt.sax.comment (where pctxt refers to the parsing htmlParserCtxt) to NULL. The logic in libxml2's HTMLParser then does not call ctxt->sax->comment, and the logic that adds comment notes to the DOM in SAX2.c and tree.c is not run when a comment is parsed by HTMLParser.c.
+            <p class="text-gray-600 leading-relaxed">
+               <code>HTMLParser.c</code> is responsible for determining what part of the document is currently being parsed, breaking it up into meaningful strings, and keeping track of parser state in a struct referenced by a <code>htmlParserCtxtPtr</code>. Those strings are passed onto functions in <code>SAX2</code>.c and <code>tree.c</code>, which actually build the DOM. This division is useful because the functions in <code>SAX2.c</code> are actually pointed to by pointers from <code>ctxt->sax</code>, and called using those pointers. Using these function pointers allows libraries that wrap libxml2 to set their own custom callbacks to replace the defaults that libxml2 uses to build the DOM. lxml uses this functionality, for example, to apply the <code>remove_comments</code> argument to <code>HTMLParser</code>. In <code>_configureSaxContext</code> in <code>parser.pxi</code>, it simply sets <code>pctxt.sax.comment</code> (where <code>pctxt</code> refers to the parsing <code>htmlParserCtxt</code>) to <code>NULL</code>. The logic in libxml2's <code>HTMLParser</code> then does not call <code>ctxt->sax->comment</code>, and the logic that adds comment notes to the DOM in <code>SAX2.c</code> and <code>tree.c</code> is not run when a comment is parsed by <code>HTMLParser.c</code>.
             </p>
         </section>
 
-        <section id="gotchas" class="mb-16">
+        <section id="gotchas" class="mb-12">
             <h2 class="text-2xl font-semibold text-gray-900 mb-6">Gotchas</h2>
-            <p>
-                `ctxt->recovery` is not used when parsing HTML. libxml2 actually always recovers from errors in that the DOM is always built to the best libxml2 can, while keeping track of whether at least one error was found while parsing in the `ctxt->wellFormed` int, which acts as a boolean. Generally speaking, it isn't until lxml processes the document struct returned by libxml2 that an HTMLParser with the `recover` keyword set to False checks if the `ctxt->wellFormed` of the document is 0 or 1`, and if it's 0, raises an exception.
+            <p class="text-gray-600 leading-relaxed">
+                <code>ctxt->recovery</code> is not used when parsing HTML. libxml2 actually always recovers from errors in that the DOM is always built to the best libxml2 can, while keeping track of whether at least one error was found while parsing in the <code>ctxt->wellFormed</code> integer, which acts as a boolean. Generally speaking, it isn't until lxml processes the document struct returned by libxml2 that an <code>HTMLParser</code> with the <code>recover</code> keyword set to False checks if the <code>ctxt->wellFormed</code> of the document is 0 or 1, and if it's 0, raises an exception.
             </p>
         </section>
 
