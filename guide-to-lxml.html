@@ -67,7 +67,7 @@
         <section id="gotchas" class="mb-12">
             <h2 class="text-2xl font-semibold text-gray-900 mb-6">Gotchas</h2>
             <p class="text-gray-600 leading-relaxed">
-                <code>ctxt->recovery</code> is not used when parsing HTML. libxml2 actually always recovers from errors in that the DOM is always built to the best libxml2 can, while keeping track of whether at least one error was found while parsing in the <code>ctxt->wellFormed</code> integer, which acts as a boolean. Generally speaking, it isn't until lxml processes the document struct returned by libxml2 that an <code>HTMLParser</code> with the <code>recover</code> keyword set to <code>False</code> checks if the <code>ctxt->wellFormed</code> of the document is 0 or 1, and if it's 0, raises an exception.
+                <code>ctxt->recovery</code> is not used when parsing HTML. libxml2 actually always recovers from errors in that the DOM is always built to the best libxml2 can, while keeping track of whether at least one error was found while parsing in the <code>ctxt->wellFormed</code> integer, which acts as a boolean. Generally speaking, it isn't until lxml processes the document struct returned by libxml2 that an <code>HTMLParser</code> with the <code>recover</code> keyword set to <code>False</code> checks if the <code>ctxt.wellFormed</code> of the document is 0 or 1, and if it's 0, raises an exception.
             </p>
         </section>
 
