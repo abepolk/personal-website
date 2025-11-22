@@ -33,11 +33,15 @@
         <section id="generalNotes" class="mb-12">
             <h2 class="text-2xl font-semibold text-gray-900 mb-6">General notes</h2>
             <p class="text-gray-600 leading-relaxed mb-4">
-                So far, in this guide, for lxml I am focused only on <code>parser.pxi</code>. All the files of lxml are <a class="text-blue-600 underline" href="https://lxml.de/lxml-source-howto.html#lxml-etree">briefly described</a> in the lxml documentation. <code>parser.pxi</code> is described specifically as: "Parsers for XML and HTML. This is the main parser engine. It's the reason why you can parse a document from various sources in two lines of Python code. It's definitely not the right place to start reading lxml's source code."
+                So far, in this guide, I am focused only on <code>parser.pxi</code> in lxml and a few C files in libxml2. All the files of lxml are <a class="text-blue-600 underline" href="https://lxml.de/lxml-source-howto.html#lxml-etree">briefly described</a> in the lxml documentation. <code>parser.pxi</code> is described specifically as: "Parsers for XML and HTML. This is the main parser engine. It's the reason why you can parse a document from various sources in two lines of Python code. It's definitely not the right place to start reading lxml's source code."
             </p>
-            <p class="text-gray-600 leading-relaxed">
+            <p class="text-gray-600 leading-relaxed mb-6">
                 When I refer to pointers that are relevant in both lxml and libxml2, I use both the Cython format used in lxml and the C format used in libxml2, e.g. <code>ctxt.node</code> / <code>ctxt->node</code>. These mean the same thing, just in the two different programming languages Cython and C.
             </p>
+            <p class="text-gray-600 leading-relaxed">
+                I have endeavored to write this guide by including only information not available elsewhere on the Internet, including the lxml and libxml2 documentation and my other writing about the libraries on Medium and StackOverflow.
+            </p>
+
         </section>
 
         <section id="cythonNotes" class="mb-12">
