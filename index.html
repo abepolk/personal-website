@@ -51,16 +51,17 @@
         <!-- About Section -->
         <section id="aboutMe" class="mb-16">
             <h2 class="text-2xl font-semibold text-gray-900 mb-6">About Me</h2>
+            <!-- change the link for "documentation" to the new lxml Guide once that's ready -->
             <p class="text-gray-600 leading-relaxed">
-                Since <a id="devLinks" class="text-blue-600 underline" href="#paymentworks">my last few software engineering positions</a>,
-                I have kept up my tech skills doing a few
-                projects. They include this website (<a class="text-blue-600 underline" href="https://github.com/abepolk/personal-website">open source code</a>) and <a class="text-blue-600 underline" href="https://github.com/abepolk/terraform-gcs-backend">a project involving Terraform</a>, but the
+                I work at 2Life Communities, an elder services center in Boston, providing technology support to residents.
+                In addition to this,
+                I am working on a few
+                projects. The
                 largest project is writing <a class="text-blue-600 underline" href="https://github.com/lxml/lxml/pulls?q=is%3Apr+author%3Aabepolk">documentation</a> and <a class="text-blue-600 underline" href="https://stackoverflow.com/a/79470846/8387246">two</a> <a class="text-blue-600 underline" href="https://medium.com/@abepolk/getting-more-information-on-lxml-errors-via-libxml2s-native-debugging-functions-27f8af439e0c">analyses</a> of the internals of <a class="text-blue-600 underline" href="https://lxml.de/">lxml</a>, a
                 Python/Cython library for web scraping and parsing HTML/XML that wraps <a class="text-blue-600 underline" href="https://gitlab.gnome.org/GNOME/libxml2">libxml2</a>, an
-                HTML/XML parsing library written in C. In addition to the projects, I have stayed
-                busy by working with a staffing agency doing assignments at the Boston Convention
-                and Exhibition Center providing customer service at professional conventions. Now,
-                I'm looking for a new position that will use my technology and interpersonal skills.
+                HTML/XML parsing library written in C. In addition to the these things, I am
+                working with a staffing agency doing assignments at the Boston Convention
+                and Exhibition Center providing customer service at professional conventions.
             </p>
         </section>
 
@@ -229,9 +230,6 @@
         trackVisibleWithGa('aboutMe', 'about_me_visible_gtag');
         trackVisibleWithGa('bitome', 'bitome_visible_gtag');
         trackVisibleWithGa('contactForm', 'contact_form_visible_gtag');
-        document.getElementById('devLinks').addEventListener('click', () => {
-            gtag('event', 'dev_position_click')
-        });
         trackVisibleWithGa('jabref', 'jabref_visible_gtag');
         trackVisibleWithGa('johnLeonard', 'john_leonard_visible_gtag');
         trackVisibleWithGa('openSource', 'open_source_visible_gtag');
