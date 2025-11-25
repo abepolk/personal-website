@@ -68,6 +68,13 @@
             </p>
         </section>
 
+        <section id="mainParsingLoop" class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-6">The main parsing loop</h2>
+            <p class="text-gray-600 leading-relaxed">
+                The main parsing loop is in <code>HTMLparser.c</code> in libxml2, in the function <code>htmlParseContent</code>. In the <code>while</code> loop, libxml2 checks the next one or more characters to classify the next meaningful string. The code here is relatively straightforward. A "bogus" comment just refers to a comment that is not correctly formatted, and <code>htmlParseElementInternal</code> is a function that itself always calls <code>htmlParseStartTag</code>, in addition to doing a few other minor things.
+            </p>
+        </section>
+
         <section id="gotchas" class="mb-12">
             <h2 class="text-2xl font-semibold text-gray-900 mb-6">Gotchas</h2>
             <p class="text-gray-600 leading-relaxed">
