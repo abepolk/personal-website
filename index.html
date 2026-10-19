@@ -1,25 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-E39G1PT4JD"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        new URLSearchParams(window.location.search).has('debug')
-            ? gtag('config', 'G-E39G1PT4JD', { debug_mode: true })
-            : gtag('config', 'G-E39G1PT4JD');
-    </script>
-    <!-- Google Tag Manager -->
-    <!-- No longer using GTM, using plain gtag.js instead -->
-    <!--    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-MCCKSNN8');</script>
-    -->
-    <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Abe Polk</title>
@@ -30,11 +11,6 @@
     <meta name="robots" content="noarchive">
 </head>
 <body class="bg-gray-50">
-    <!-- Google Tag Manager (noscript) -->
-    <!-- <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MCCKSNN8"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    -->
-    <!-- End Google Tag Manager (noscript) -->
     <!-- Header Section -->
     <header class="bg-white shadow-xs">
         <div class="max-w-xl lg:max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -178,67 +154,5 @@
             <p id="contactFormErrorMsg" class="hidden text-gray-700">There was a problem sending your message. Please try again later.</p>
         </section>
     </main>
-
-    <script>
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const myForm = e.target;
-            const formData = new FormData(myForm);
-            fetch("/", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: new URLSearchParams(formData).toString()
-            })
-                .then(() => {
-                    console.log("Contact form successfully submitted");
-                    document.getElementById('contactFormSuccessMsg').classList.remove('hidden');
-            })
-                .catch((error) => {
-                    console.error(error);
-                    document.getElementById('contactFormErrorMsg').classList.remove('hidden');
-            })
-                .finally(() => {
-                    document.getElementById('contactForm').classList.add('hidden');
-            });
-            // Only used if we are not making the form disappear, which we are
-            // this.reset();
-        });
-        // Track an element with Google Analytics, assigning it a GA event name.
-        function trackVisibleWithGa(elementId, eventName) {
-            let timerId = null;
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        // Element has become visible, start the timer
-                        timerId = setTimeout(() => {
-                            console.log(`GA event ${eventName} fired`);
-                            gtag('event', eventName);
-                            timerId = null;
-                        }, 500);
-                    } else {
-                        // Element has become not visible
-                        if (timerId) {
-                            // Clear the timer
-                            clearTimeout(timerId);
-                            timerId = null;
-                        }
-                    }
-                });
-            }, {threshold: 0.8});
-            const element = document.getElementById(elementId);
-            observer.observe(element);
-            return () => observer.disconnect();
-        }
-        trackVisibleWithGa('aboutMe', 'about_me_visible_gtag');
-        trackVisibleWithGa('bitome', 'bitome_visible_gtag');
-        trackVisibleWithGa('contactForm', 'contact_form_visible_gtag');
-        trackVisibleWithGa('jabref', 'jabref_visible_gtag');
-        trackVisibleWithGa('johnLeonard', 'john_leonard_visible_gtag');
-        trackVisibleWithGa('nurtury', 'nurtury_visible_gtag');
-        trackVisibleWithGa('openSource', 'open_source_visible_gtag');
-        trackVisibleWithGa('paymentworks', 'paymentworks_visible_gtag');
-        trackVisibleWithGa('powerOfPatients', 'power_of_patients_visible_gtag');
-        trackVisibleWithGa('twoLife', 'two_life_visible_gtag');
-    </script>
 </body>
 </html>
